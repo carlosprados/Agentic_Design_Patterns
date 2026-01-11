@@ -1,19 +1,22 @@
 import os
+import uuid
+import asyncio
 from dotenv import load_dotenv
 
 # Google ADK imports
 try:
     from google.adk.agents import LlmAgent, ParallelAgent, SequentialAgent
+    from google.adk.runners import Runner
+    from google.adk.sessions import InMemorySessionService
+    from google.adk.tools import google_search
+    from google.genai import types
 except ImportError:
     print("Error: Google ADK components not found. Ensure the library is installed.")
-    LlmAgent = ParallelAgent = SequentialAgent = None
+    LlmAgent = ParallelAgent = SequentialAgent = Runner = InMemorySessionService = google_search = types = None
 
 # Load environment variables
 load_dotenv()
 
-# Placeholder for tools (e.g., google_search)
-# In a real scenario, this would be imported or initialized
-google_search = None 
 GEMINI_MODEL = "gemini-2.5-flash"
 
 def setup_parallel_research_agents():
@@ -126,14 +129,58 @@ def setup_parallel_research_agents():
     
     return sequential_pipeline_agent
 
-def main():
-    print("--- Google ADK Parallelization Example ---")
+async def main():
+    print("--- Google ADK Parallelization Example (Async) ---")
     pipeline = setup_parallel_research_agents()
-    if pipeline:
-        print("Pipeline agents configured successfully.")
-        # Execution logic would follow using a runner as seen in Chapter 2
-    else:
+    if not pipeline or not Runner:
         print("Configuration failed due to missing components.")
+        return
+
+    # Using the async Runner and explicit session service
+    session_service = InMemorySessionService()
+    runner = Runner(
+        agent=pipeline, 
+        app_name="parallel_research_app", 
+        session_service=session_service
+    )
+    
+    user_id = "researcher_001"
+    session_id = str(uuid.uuid4())
+    
+    # In ADK 1.22.0, explicit session creation is required
+    await runner.session_service.create_session(
+        app_name=runner.app_name, 
+        user_id=user_id, 
+        session_id=session_id
+    )
+
+    request = "Conduct research on the current state of green technologies."
+    print(f"\n--- Running Pipeline: {request} ---")
+
+    try:
+        final_report = ""
+        # Using run_async for a clean async lifecycle
+        async for event in runner.run_async(
+            user_id=user_id,
+            session_id=session_id,
+            new_message=types.Content(
+                role='user',
+                parts=[types.Part(text=request)]
+            ),
+        ):
+            if event.is_final_response() and event.content:
+                if hasattr(event.content, 'text') and event.content.text:
+                     final_report = event.content.text
+                elif event.content.parts:
+                    text_parts = [part.text for part in event.content.parts if part.text]
+                    final_report = "".join(text_parts)
+                # We don't break here to ensure the generator finishes its lifecycle
+
+        print("\n--- FINAL SYNTHESIZED REPORT ---")
+        print(final_report)
+
+    except Exception as e:
+        print(f"An error occurred during execution: {e}")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
