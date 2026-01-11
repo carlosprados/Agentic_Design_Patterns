@@ -20,6 +20,7 @@ While Jupyter Notebooks are excellent for exploration, moving to pure Python scr
 * **Maintainability:** Compatible with standard linters, formatters, and IDE features.
 * **Modularity:** Easier to import classes and functions into larger applications.
 * **Version Control:** Cleaner diffs and history tracking in Git.
+* **Cost Efficiency:** Standardized on **Gemini 2.5 Flash** to ensure full functionality within Google's free tier.
 
 ## 📂 Repository Contents
 
@@ -65,7 +66,7 @@ Following the book's examples, this repository utilizes the following frameworks
 * **LangChain / LangGraph:** For graph-based agent flows.
 * **Google Agent Developer Kit (ADK):** For enterprise-grade agent construction.
 * **CrewAI:** For role-based multi-agent orchestration.
-* **LLM Providers:** OpenAI (GPT-4o) and Google Gemini.
+* **LLM Providers:** Optimized for **Google Gemini 2.5 Flash** (Free Tier compatible).
 
 ## ⚙️ Installation
 
