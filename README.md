@@ -24,40 +24,42 @@ While Jupyter Notebooks are excellent for exploration, moving to pure Python scr
 
 ## 📂 Repository Contents
 
+The primary goal of this repository is to ensure that **every example is fully functional** in a pure Python environment. There is a continuous effort to test and verify each script to guarantee reliability and performance.
+
 This repository covers the patterns and frameworks discussed in the book, organized by the original structure:
 
 ### Part 1: Foundational Patterns
 
-* **Prompt Chaining:** Sequential workflows and pipelines.
-* **Routing:** Dynamic decision-making and intent classification.
-* **Parallelization:** Concurrent execution of independent sub-tasks.
-* **Reflection:** Self-correction and critique loops (Generator-Critic).
-* **Tool Use:** Function calling and external API integration.
-* **Planning:** Breaking complex goals into actionable steps.
-* **Multi-Agent:** Orchestrating teams of specialized agents.
+* **01 Prompt Chaining** ✅: Sequential workflows and pipelines.
+* **02 Routing** ✅: Dynamic decision-making and intent classification.
+* **03 Parallelization** ⏳: Concurrent execution of independent sub-tasks.
+* **04 Reflection** ⏳: Self-correction and critique loops (Generator-Critic).
+* **05 Tool Use** ⏳: Function calling and external API integration.
+* **06 Planning** ⏳: Breaking complex goals into actionable steps.
+* **07 Multi-Agent** ⏳: Orchestrating teams of specialized agents.
 
 ### Part 2: Advanced Capabilities
 
-* **Memory Management:** Short-term context vs. Long-term persistence.
-* **Learning and Adaptation:** Evolving agent behavior over time.
-* **Model Context Protocol (MCP):** Standardizing connection to external resources.
-* **Goal Setting and Monitoring:** Tracking objectives and milestones.
+* **08 Memory Management** ⏳: Short-term context vs. Long-term persistence.
+* **09 Learning and Adaptation** ⏳: Evolving agent behavior over time.
+* **10 Model Context Protocol (MCP)** ⏳: Standardizing connection to external resources.
+* **11 Goal Setting and Monitoring** ⏳: Tracking objectives and milestones.
 
 ### Part 3: Robustness & Reliability
 
-* **Exception Handling and Recovery:** Recovery strategies and fallback mechanisms.
-* **Human-in-the-Loop:** Integration of human oversight and approval.
-* **Knowledge Retrieval (RAG):** Grounding agents in external data.
+* **12 Exception Handling and Recovery** ⏳: Recovery strategies and fallback mechanisms.
+* **13 Human-in-the-Loop** ⏳: Integration of human oversight and approval.
+* **14 Knowledge Retrieval (RAG)** ⏳: Grounding agents in external data.
 
 ### Part 4: Optimization & Safety
 
-* **Inter-Agent Communication (A2A):** Protocols for agent-to-agent talk.
-* **Resource-Aware Optimization:** Managing compute and cost.
-* **Reasoning Techniques:** CoT, ReAct, and Tree of Thoughts.
-* **Guardrails/Safety Patterns:** Input/Output validation and safety boundaries.
-* **Evaluation and Monitoring:** Assessing agent performance and reliability.
-* **Prioritization:** Managing task urgency and resource allocation.
-* **Exploration and Discovery:** Autonomous learning and information seeking.
+* **15 Inter-Agent Communication (A2A)** ⏳: Protocols for agent-to-agent talk.
+* **16 Resource-Aware Optimization** ⏳: Managing compute and cost.
+* **17 Reasoning Techniques** ⏳: CoT, ReAct, and Tree of Thoughts.
+* **18 Guardrails/Safety Patterns** ⏳: Input/Output validation and safety boundaries.
+* **19 Evaluation and Monitoring** ⏳: Assessing agent performance and reliability.
+* **20 Prioritization** ⏳: Managing task urgency and resource allocation.
+* **21 Exploration and Discovery** ⏳: Autonomous learning and information seeking.
 
 ## 🛠️ Tech Stack
 

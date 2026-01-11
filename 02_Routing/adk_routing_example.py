@@ -1,6 +1,7 @@
 import uuid
 from typing import Dict, Any, Optional
 import os
+import asyncio
 from dotenv import load_dotenv
 
 # Google ADK imports (Assuming these are available in the environment)
@@ -86,9 +87,10 @@ def run_coordinator(runner: InMemoryRunner, request: str):
     try:
         user_id = "user_123"
         session_id = str(uuid.uuid4())
-        runner.session_service.create_session(
+        # We use asyncio.run to await the async create_session call in a sync context
+        asyncio.run(runner.session_service.create_session(
             app_name=runner.app_name, user_id=user_id, session_id=session_id
-        )
+        ))
 
         for event in runner.run(
             user_id=user_id,

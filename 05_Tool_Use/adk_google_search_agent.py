@@ -41,16 +41,22 @@ async def call_agent(query):
    session_service = InMemorySessionService()
    runner = Runner(agent=agent, app_name=APP_NAME, session_service=session_service)
 
+   # In ADK 1.22.0, explicit session creation is required before running if providing a session_id
+   await runner.session_service.create_session(
+       app_name=runner.app_name, 
+       user_id=USER_ID, 
+       session_id=SESSION_ID
+   )
+
    content = types.Content(role='user', parts=[types.Part(text=query)])
    
    print(f"\n--- Running Search Query: {query} ---")
-   # Note: The original used runner.run (sync) in an async context. 
-   # We use the events iterator here.
-   events = runner.run(user_id=USER_ID, session_id=SESSION_ID, new_message=content)
-
-   for event in events:
+   # We use run_async since we are in an async function
+   async for event in runner.run_async(user_id=USER_ID, session_id=SESSION_ID, new_message=content):
        if event.is_final_response():
-           final_response = event.content.parts[0].text
+           final_response = ""
+           if event.content and event.content.parts:
+               final_response = event.content.parts[0].text
            print("Agent Response: ", final_response)
 
 if __name__ == "__main__":

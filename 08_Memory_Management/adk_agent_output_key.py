@@ -1,4 +1,5 @@
 import os
+import asyncio
 from dotenv import load_dotenv
 
 # Google ADK imports
@@ -36,11 +37,15 @@ def setup_and_run_agent():
         session_service=session_service
     )
     
-    session = session_service.create_session(
+    # In ADK 1.22.0, explicit session creation is required. It's an async method.
+    asyncio.run(session_service.create_session(
         app_name=app_name,
         user_id=user_id,
         session_id=session_id
-    )
+    ))
+    
+    # We retrieve the session after creation (get_session is also likely async)
+    session = asyncio.run(session_service.get_session(app_name, user_id, session_id))
 
     print(f"Initial state: {session.state}")
 
@@ -61,7 +66,7 @@ def setup_and_run_agent():
             print("Agent responded.")
 
     # Check updated state
-    updated_session = session_service.get_session(app_name, user_id, session_id)
+    updated_session = asyncio.run(session_service.get_session(app_name, user_id, session_id))
     print(f"\nState after agent run (should contain 'last_greeting'):\n{updated_session.state}")
 
 if __name__ == "__main__":

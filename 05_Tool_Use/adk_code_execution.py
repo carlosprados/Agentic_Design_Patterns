@@ -45,6 +45,13 @@ async def call_agent_async(agent, query):
     session_service = InMemorySessionService()
     runner = Runner(agent=agent, app_name=APP_NAME, session_service=session_service)
 
+    # In ADK 1.22.0, explicit session creation is required before running if providing a session_id
+    await runner.session_service.create_session(
+        app_name=runner.app_name, 
+        user_id=USER_ID, 
+        session_id=SESSION_ID
+    )
+
     content = types.Content(role='user', parts=[types.Part(text=query)])
     print(f"\n--- Running Query: {query} ---")
     

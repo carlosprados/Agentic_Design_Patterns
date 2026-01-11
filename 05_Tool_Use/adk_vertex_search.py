@@ -63,6 +63,12 @@ async def main():
             app_name=APP_NAME,
             session_service=InMemorySessionService(),
         )
+        # In ADK 1.22.0, explicit session creation is required before running if providing a session_id
+        await runner.session_service.create_session(
+            app_name=runner.app_name, 
+            user_id=USER_ID, 
+            session_id=SESSION_ID
+        )
         await call_vsearch_agent_async(runner, "Summarize the main points about the strategy document.")
     else:
         print("Vertex Search agent setup failed. Ensure DATASTORE_ID is set.")

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough, RunnableBranch
+from langchain_core.runnables import RunnablePassthrough, RunnableBranch, RunnableLambda
 
 # Load environment variables
 load_dotenv()
@@ -63,7 +63,7 @@ def setup_langgraph_router():
     # Combine into a single chain
     full_chain = (
         {"decision": router_chain, "request": RunnablePassthrough()}
-        | (lambda x: route_to_handler(x))
+        | RunnableLambda(route_to_handler)
     )
     
     return full_chain
