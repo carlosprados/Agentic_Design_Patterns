@@ -1,5 +1,7 @@
 # Agentic Design Patterns - Pure Python Implementation
+
 Plain Python conversion of the code from Antonio Gulli's **Agentic Design Patterns** great book. This project refactors the original book notebooks into executable `.py` scripts, enabling easier integration, debugging, and production usage.
+
 
 ## 📚 Source Material & Credits
 
@@ -24,30 +26,37 @@ While Jupyter Notebooks are excellent for exploration, moving to pure Python scr
 This repository covers the patterns and frameworks discussed in the book, organized by the original structure:
 
 ### Part 1: Foundational Patterns
+
 * **Prompt Chaining:** Sequential workflows and pipelines.
 * **Routing:** Dynamic decision-making and intent classification.
 * **Parallelization:** Concurrent execution of independent sub-tasks.
 * **Reflection:** Self-correction and critique loops (Generator-Critic).
 * **Tool Use:** Function calling and external API integration.
 * **Planning:** Breaking complex goals into actionable steps.
-* **Multi-Agent Collaboration:** Orchestrating teams of specialized agents.
+* **Multi-Agent:** Orchestrating teams of specialized agents.
 
 ### Part 2: Advanced Capabilities
+
 * **Memory Management:** Short-term context vs. Long-term persistence.
-* **Learning & Adaptation:** Evolving agent behavior over time.
+* **Learning and Adaptation:** Evolving agent behavior over time.
 * **Model Context Protocol (MCP):** Standardizing connection to external resources.
-* **Goal Setting:** Tracking objectives and milestones.
+* **Goal Setting and Monitoring:** Tracking objectives and milestones.
 
 ### Part 3: Robustness & Reliability
-* **Exception Handling:** Recovery strategies and fallback mechanisms.
+
+* **Exception Handling and Recovery:** Recovery strategies and fallback mechanisms.
 * **Human-in-the-Loop:** Integration of human oversight and approval.
 * **Knowledge Retrieval (RAG):** Grounding agents in external data.
 
 ### Part 4: Optimization & Safety
+
 * **Inter-Agent Communication (A2A):** Protocols for agent-to-agent talk.
 * **Resource-Aware Optimization:** Managing compute and cost.
 * **Reasoning Techniques:** CoT, ReAct, and Tree of Thoughts.
-* **Guardrails & Safety:** Input/Output validation and safety boundaries.
+* **Guardrails/Safety Patterns:** Input/Output validation and safety boundaries.
+* **Evaluation and Monitoring:** Assessing agent performance and reliability.
+* **Prioritization:** Managing task urgency and resource allocation.
+* **Exploration and Discovery:** Autonomous learning and information seeking.
 
 ## 🛠️ Tech Stack
 
@@ -60,13 +69,14 @@ Following the book's examples, this repository utilizes the following frameworks
 
 ## ⚙️ Installation
 
-1.  **Clone this repository:**
+1. **Clone this repository:**
+
     ```bash
     git clone https://github.com/carlosprados/Agentic_Design_Patterns.git 
     cd Agentic_Design_Patterns
     ```
 
-2.  **Initialize environment and install dependencies:**
+2. **Initialize environment and install dependencies:**
     Using `uv` is recommended for faster and more reliable dependency management.
 
     ```bash
@@ -74,7 +84,7 @@ Following the book's examples, this repository utilizes the following frameworks
     uv sync
     ```
 
-4.  **Set up Environment Variables:**
+3. **Set up Environment Variables:**
     Create a `.env` file in the root directory and add your API keys:
 
     ```env
@@ -88,10 +98,11 @@ Following the book's examples, this repository utilizes the following frameworks
 Navigate to the specific pattern folder and run the script using `uv run`. For example, to run the **Planning Pattern** example:
 
 ```bash
-uv run 06_planning/planning_agent.py
+uv run 06_Planning/planning_agent.py
 ```
 
 ## 🤝 Contributing
+
 Contributions are welcome! If you find an issue with the conversion logic (e.g., a missing import that was implicit in the notebook), please open an issue or Pull Request.
 
 For theoretical questions regarding the patterns themselves, please refer to Antonio Gulli's original book.
