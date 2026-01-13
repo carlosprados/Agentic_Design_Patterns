@@ -25,8 +25,7 @@ def setup_reflection_chain():
     # 1. Initial Generation
     generation_chain = (
         ChatPromptTemplate.from_messages([
-            ("system", "Write a short, simple product description for a new smart coffee mug."),
-            ("user", "{product_details}")
+            ("user", "Write a short, simple product description for a new smart coffee mug based on these details: {product_details}"),
         ])
         | llm
         | StrOutputParser()
@@ -35,9 +34,11 @@ def setup_reflection_chain():
     # 2. Critique
     critique_chain = (
         ChatPromptTemplate.from_messages([
-            ("system", """Critique the following product description based on clarity, conciseness, and appeal.
-            Provide specific suggestions for improvement."""),
-            ("user", "Product Description to Critique:\n{initial_description}")
+            ("user", """Critique the following product description based on clarity, conciseness, and appeal.
+            Provide specific suggestions for improvement.
+
+            Product Description to Critique:
+            {initial_description}"""),
         ])
         | llm
         | StrOutputParser()
@@ -46,14 +47,13 @@ def setup_reflection_chain():
     # 3. Refinement
     refinement_chain = (
         ChatPromptTemplate.from_messages([
-            ("system", """Based on the original product details and the following critique,
+            ("user", """Based on the original product details and the following critique,
             rewrite the product description to be more effective.
 
             Original Product Details: {product_details}
             Critique: {critique}
 
             Refined Product Description:"""),
-            ("user", "")
         ])
         | llm
         | StrOutputParser()
