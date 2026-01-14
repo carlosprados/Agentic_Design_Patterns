@@ -34,7 +34,7 @@ This repository covers the patterns and frameworks discussed in the book, organi
 * **02 Routing** ✅: Dynamic decision-making and intent classification.
 * **03 Parallelization** ✅: Concurrent execution of independent sub-tasks.
 * **04 Reflection** ✅: Self-correction and critique loops (Generator-Critic).
-* **05 Tool Use** ⏳: Function calling and external API integration.
+* **05 Tool Use** ✅: Function calling and external API integration.
 * **06 Planning** ⏳: Breaking complex goals into actionable steps.
 * **07 Multi-Agent** ⏳: Orchestrating teams of specialized agents.
 
