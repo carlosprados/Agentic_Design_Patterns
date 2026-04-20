@@ -1,9 +1,13 @@
 import os
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from shared.llm import get_llm
 from langchain_core.messages import SystemMessage, HumanMessage
 
-# Load environment variables
 load_dotenv()
 
 def run_reflection_loop(task: str, max_iterations: int = 3):
@@ -14,7 +18,7 @@ def run_reflection_loop(task: str, max_iterations: int = 3):
         print("Error: GOOGLE_API_KEY not found.")
         return
 
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.1)
+    llm = get_llm(temperature=0.1)
 
     current_code = ""
     message_history = [HumanMessage(content=task)]

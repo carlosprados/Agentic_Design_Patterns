@@ -1,15 +1,20 @@
 import os
+import sys
 import requests
+from pathlib import Path
 from typing import List, TypedDict
-from dotenv import load_dotenv
 
-# LangChain/LangGraph imports
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from dotenv import load_dotenv
+from shared.llm import get_llm
+
 try:
     from langchain_community.document_loaders import TextLoader
     from langchain_core.documents import Document
     from langchain_core.prompts import ChatPromptTemplate
     from langchain_core.output_parsers import StrOutputParser
-    from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+    from langchain_google_genai import GoogleGenerativeAIEmbeddings
     from langchain_community.vectorstores import Weaviate
     from langchain.text_splitter import CharacterTextSplitter
     from langgraph.graph import StateGraph, END
@@ -17,9 +22,8 @@ try:
     from weaviate.embedded import EmbeddedOptions
 except ImportError:
     print("Error: Required LangChain/LangGraph/Weaviate components not found.")
-    TextLoader = Document = ChatPromptTemplate = StrOutputParser = GoogleGenerativeAIEmbeddings = ChatGoogleGenerativeAI = CharacterTextSplitter = StateGraph = END = weaviate = EmbeddedOptions = None
+    TextLoader = Document = ChatPromptTemplate = StrOutputParser = GoogleGenerativeAIEmbeddings = CharacterTextSplitter = StateGraph = END = weaviate = EmbeddedOptions = None
 
-# Load environment variables
 load_dotenv()
 
 # --- 1. Data Preparation ---
@@ -104,7 +108,7 @@ def setup_and_run_rag():
         print("Retriever not available. Ensure GOOGLE_API_KEY and Weaviate dependencies are correct.")
         return
 
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+    llm = get_llm(temperature=0)
     app = build_rag_graph(retriever, llm)
 
     query = "What did the president say about Justice Breyer"

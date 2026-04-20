@@ -1,15 +1,15 @@
-import os
-import sys
 import asyncio
-from dotenv import load_dotenv
+import sys
+from pathlib import Path
 
-# LangChain imports
-from langchain_google_genai import ChatGoogleGenerativeAI
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from dotenv import load_dotenv
+from shared.llm import get_llm
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 
-# Load environment variables
 load_dotenv()
 
 def setup_reflection_chain():
@@ -17,7 +17,7 @@ def setup_reflection_chain():
     Sets up a basic reflection chain with Generation, Critique, and Refinement stages.
     """
     try:
-        llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7)
+        llm = get_llm(temperature=0.7)
     except Exception as e:
         print(f"Error initializing LLM: {e}")
         return None

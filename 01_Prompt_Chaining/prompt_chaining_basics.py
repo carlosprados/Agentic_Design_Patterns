@@ -1,10 +1,13 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-import os
 from dotenv import load_dotenv
+from shared.llm import get_llm
 
-# Load environment variables
 load_dotenv()
 
 def run_prompt_chaining_example():
@@ -14,7 +17,7 @@ def run_prompt_chaining_example():
     """
     # Initialize the Language Model
     # Ensure GOOGLE_API_KEY is set in your .env file
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+    llm = get_llm(temperature=0)
 
     # --- Prompt 1: Extract Information ---
     prompt_extract = ChatPromptTemplate.from_template(

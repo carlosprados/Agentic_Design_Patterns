@@ -1,14 +1,15 @@
-import os
 import asyncio
+import sys
+from pathlib import Path
 from typing import List
-from dotenv import load_dotenv
 
-# LangChain imports
-from langchain_google_genai import ChatGoogleGenerativeAI
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from dotenv import load_dotenv
+from shared.llm import get_llm
 from langchain_core.tools import tool as langchain_tool
 from langchain.agents import create_agent
 
-# Load environment variables
 load_dotenv()
 
 @langchain_tool
@@ -33,7 +34,7 @@ def search_information(query: str) -> str:
 
 def setup_tool_agent():
     try:
-        llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0)
+        llm = get_llm(temperature=0)
     except Exception as e:
         print(f"🛑 Error initializing language model: {e}")
         return None

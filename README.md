@@ -20,7 +20,8 @@ While Jupyter Notebooks are excellent for exploration, moving to pure Python scr
 * **Maintainability:** Compatible with standard linters, formatters, and IDE features.
 * **Modularity:** Easier to import classes and functions into larger applications.
 * **Version Control:** Cleaner diffs and history tracking in Git.
-* **Cost Efficiency:** Standardized on **Gemini 2.5 Flash** to ensure full functionality within Google's free tier.
+* **Cost Efficiency:** Default LLM is **Gemini 2.5 Flash** (Google's free tier). Also supports **Ollama** for fully local execution.
+* **Provider Flexibility:** A single `shared/llm.py` module abstracts the LLM provider. Switch between Gemini and Ollama with one environment variable — zero code changes.
 
 ## 📂 Repository Contents
 
@@ -35,40 +36,63 @@ This repository covers the patterns and frameworks discussed in the book, organi
 * **03 Parallelization** ✅: Concurrent execution of independent sub-tasks.
 * **04 Reflection** ✅: Self-correction and critique loops (Generator-Critic).
 * **05 Tool Use** ✅: Function calling and external API integration.
-* **06 Planning** ⏳: Breaking complex goals into actionable steps.
-* **07 Multi-Agent** ⏳: Orchestrating teams of specialized agents.
+* **06 Planning** ✅: Breaking complex goals into actionable steps.
+* **07 Multi-Agent** ✅: Orchestrating teams of specialized agents.
 
 ### Part 2: Advanced Capabilities
 
-* **08 Memory Management** ⏳: Short-term context vs. Long-term persistence.
-* **09 Learning and Adaptation** ⏳: Evolving agent behavior over time.
-* **10 Model Context Protocol (MCP)** ⏳: Standardizing connection to external resources.
-* **11 Goal Setting and Monitoring** ⏳: Tracking objectives and milestones.
+* **08 Memory Management** ✅: Short-term context vs. Long-term persistence.
+* **09 Learning and Adaptation** ✅: Evolving agent behavior over time.
+* **10 Model Context Protocol (MCP)** ✅: Standardizing connection to external resources.
+* **11 Goal Setting and Monitoring** ✅: Tracking objectives and milestones.
 
 ### Part 3: Robustness & Reliability
 
-* **12 Exception Handling and Recovery** ⏳: Recovery strategies and fallback mechanisms.
-* **13 Human-in-the-Loop** ⏳: Integration of human oversight and approval.
-* **14 Knowledge Retrieval (RAG)** ⏳: Grounding agents in external data.
+* **12 Exception Handling and Recovery** ✅: Recovery strategies and fallback mechanisms.
+* **13 Human-in-the-Loop** ✅: Integration of human oversight and approval.
+* **14 Knowledge Retrieval (RAG)** ✅: Grounding agents in external data.
 
 ### Part 4: Optimization & Safety
 
-* **15 Inter-Agent Communication (A2A)** ⏳: Protocols for agent-to-agent talk.
-* **16 Resource-Aware Optimization** ⏳: Managing compute and cost.
-* **17 Reasoning Techniques** ⏳: CoT, ReAct, and Tree of Thoughts.
-* **18 Guardrails/Safety Patterns** ⏳: Input/Output validation and safety boundaries.
-* **19 Evaluation and Monitoring** ⏳: Assessing agent performance and reliability.
-* **20 Prioritization** ⏳: Managing task urgency and resource allocation.
-* **21 Exploration and Discovery** ⏳: Autonomous learning and information seeking.
+* **15 Inter-Agent Communication (A2A)** ✅: Protocols for agent-to-agent talk.
+* **16 Resource-Aware Optimization** ✅: Managing compute and cost.
+* **17 Reasoning Techniques** ✅: CoT, ReAct, and Tree of Thoughts.
+* **18 Guardrails/Safety Patterns** ✅: Input/Output validation and safety boundaries.
+* **19 Evaluation and Monitoring** ✅: Assessing agent performance and reliability.
+* **20 Prioritization** ✅: Managing task urgency and resource allocation.
+* **21 Exploration and Discovery** ✅: Autonomous learning and information seeking.
 
 ## 🛠️ Tech Stack
 
-Following the book's examples, this repository utilizes the following frameworks:
+All examples use a single framework stack for consistency and simplicity:
 
-* **LangChain / LangGraph:** For graph-based agent flows.
-* **Google Agent Developer Kit (ADK):** For enterprise-grade agent construction.
-* **CrewAI:** For role-based multi-agent orchestration.
-* **LLM Providers:** Optimized for **Google Gemini 2.5 Flash** (Free Tier compatible).
+* **LangGraph:** For stateful, graph-based agent workflows (preferred for all patterns with branching, loops, or multi-agent coordination).
+* **LangChain LCEL:** For simple sequential chains and prompt pipelines.
+* **LLM Provider:** Centralized in [`shared/llm.py`](shared/llm.py). Default: **Google Gemini 2.5 Flash** (Free Tier). Also supports **Ollama** for local models.
+
+### Switching LLM Providers
+
+All scripts use `get_llm()` from `shared/llm.py` instead of instantiating a model directly. To switch providers, set environment variables in your `.env` file:
+
+| Variable | Default | Description |
+|---|---|---|
+| `LLM_PROVIDER` | `gemini` | Provider to use: `gemini` or `ollama` |
+| `GOOGLE_API_KEY` | — | Required for Gemini |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | Gemini model name |
+| `OLLAMA_MODEL` | `llama3.1:8b` | Ollama model name (requires `ollama` running locally) |
+
+**Example — run with Ollama:**
+
+```bash
+# .env
+LLM_PROVIDER=ollama
+OLLAMA_MODEL=llama3.1:8b
+
+# Then run any example as usual
+uv run 02_Routing/langgraph_coordinator_routing.py
+```
+
+> **Note:** Tool-calling examples (Ch05, Ch07 agent-as-tool, Ch20) require models with good function-calling support. With Ollama, `llama3.1` and `qwen2.5` work well; smaller models may struggle.
 
 ## ⚙️ Installation
 
@@ -88,20 +112,25 @@ Following the book's examples, this repository utilizes the following frameworks
     ```
 
 3. **Set up Environment Variables:**
-    Create a `.env` file in the root directory and add your API keys:
+    Create a `.env` file in the root directory:
 
     ```env
-    OPENAI_API_KEY=sk-...
+    # Option A: Gemini (default)
     GOOGLE_API_KEY=AIza...
-    ANTHROPIC_API_KEY=sk-...
+
+    # Option B: Ollama (local, no API key needed)
+    # LLM_PROVIDER=ollama
+    # OLLAMA_MODEL=llama3.1:8b
     ```
 
 ## 💻 Usage
 
-Navigate to the specific pattern folder and run the script using `uv run`. For example, to run the **Planning Pattern** example:
+Run any example with `uv run` from the project root:
 
 ```bash
-uv run 06_Planning/planning_agent.py
+uv run 06_Planning/langchain_planning_writer.py
+uv run 02_Routing/langgraph_coordinator_routing.py
+uv run 07_Multi_Agent/langgraph_loop_agent.py
 ```
 
 ## 🤝 Contributing

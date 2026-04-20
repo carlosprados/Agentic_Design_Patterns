@@ -1,21 +1,22 @@
-import os
-import asyncio
-from typing import List, Optional, Dict
+import sys
+from pathlib import Path
+from typing import Optional, Dict
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
+from shared.llm import get_llm
 
-# LangChain imports
 try:
     from langchain_core.prompts import ChatPromptTemplate
     from langchain_core.tools import Tool
-    from langchain_google_genai import ChatGoogleGenerativeAI
     from langchain.agents import AgentExecutor, create_react_agent
     from langchain.memory import ConversationBufferMemory
 except ImportError:
     print("Error: Required LangChain components not found.")
-    ChatPromptTemplate = Tool = ChatGoogleGenerativeAI = AgentExecutor = create_react_agent = ConversationBufferMemory = None
+    ChatPromptTemplate = Tool = AgentExecutor = create_react_agent = ConversationBufferMemory = None
 
-# Load environment variables
 load_dotenv()
 
 # --- 1. Task Management System ---
@@ -71,10 +72,10 @@ def assign_task_tool(task_id: str, worker: str) -> str:
 
 # --- 3. Agent Setup ---
 def setup_pm_agent():
-    if not all([ChatGoogleGenerativeAI, AgentExecutor]):
+    if not all([AgentExecutor, create_react_agent]):
         return None
 
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+    llm = get_llm(temperature=0)
     
     tools = [
         Tool(name="create_task", func=create_task_tool, description="Create a task. Input: description"),

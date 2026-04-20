@@ -1,18 +1,15 @@
 import os
+import sys
 import requests
 import json
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from shared.llm import get_llm
 
-# Load environment variables
 load_dotenv()
-
-def get_llm():
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        print("ERROR: GOOGLE_API_KEY not set.")
-        return None
-    return ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
 
 def classify_prompt(llm, prompt: str) -> str:
     """
@@ -84,13 +81,12 @@ def generate_optimized_response(prompt: str, classification: str, search_results
 
     print(f"Using model: {model} for classification: {classification}")
     
-    llm = ChatGoogleGenerativeAI(model=model)
+    llm = get_llm(temperature=0)
     response = llm.invoke(full_content)
     return response.content
 
 def run_resource_aware_demo(test_prompt: str):
-    llm = get_llm()
-    if not llm: return
+    llm = get_llm(temperature=0)
 
     print(f"\n--- Processing Prompt: '{test_prompt}' ---")
     

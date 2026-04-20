@@ -1,9 +1,12 @@
-import os
-from dotenv import load_dotenv
+import sys
+from pathlib import Path
 
-# LangChain imports
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from dotenv import load_dotenv
+from shared.llm import get_llm
+
 try:
-    from langchain_google_genai import ChatGoogleGenerativeAI
     from langchain.memory import ChatMessageHistory, ConversationBufferMemory
     from langchain.chains import LLMChain
     from langchain_core.prompts import (
@@ -14,13 +17,12 @@ try:
     )
 except ImportError:
     print("Error: Required LangChain components not found.")
-    ChatGoogleGenerativeAI = ChatMessageHistory = ConversationBufferMemory = LLMChain = None
+    ChatMessageHistory = ConversationBufferMemory = LLMChain = None
 
-# Load environment variables
 load_dotenv()
 
 def demo_langchain_memory():
-    if not all([ChatGoogleGenerativeAI, ChatMessageHistory, ConversationBufferMemory, LLMChain]):
+    if not all([ChatMessageHistory, ConversationBufferMemory, LLMChain]):
         print("Skipping LangChain memory demo due to missing dependencies.")
         return
 
@@ -37,7 +39,7 @@ def demo_langchain_memory():
     
     # 3. Conversational Chain with Memory
     try:
-        llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+        llm = get_llm(temperature=0)
         prompt = ChatPromptTemplate(
             messages=[
                 SystemMessagePromptTemplate.from_template("You are a friendly travel assistant."),

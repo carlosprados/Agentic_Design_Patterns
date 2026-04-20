@@ -1,17 +1,14 @@
 import os
 import random
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from dotenv import load_dotenv, find_dotenv
+from shared.llm import get_llm
 
-# LangChain imports
-try:
-    from langchain_google_genai import ChatGoogleGenerativeAI
-except ImportError:
-    print("Error: 'langchain_google_genai' not found. Agent will not run.")
-    ChatGoogleGenerativeAI = None
-
-# Load environment variables
 _ = load_dotenv(find_dotenv())
 
 def generate_prompt(use_case: str, goals: list[str], previous_code: str = "", feedback: str = "") -> str:
@@ -107,15 +104,7 @@ def run_code_iteration_agent(use_case: str, goals_list: list[str], max_iteration
     """
     Main logic for the goal-setting and monitoring agent.
     """
-    if not ChatGoogleGenerativeAI:
-        return
-
-    google_key = os.getenv("GOOGLE_API_KEY")
-    if not google_key:
-        print("ERROR: GOOGLE_API_KEY not set.")
-        return
-
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.3)
+    llm = get_llm(temperature=0.3)
 
     print(f"\n🎯 Use Case: {use_case}")
     print("🎯 Goals:")

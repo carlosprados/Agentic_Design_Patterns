@@ -1,13 +1,14 @@
-import os
-from dotenv import load_dotenv
+import sys
+from pathlib import Path
 
-# LangChain imports
-from langchain_google_genai import ChatGoogleGenerativeAI
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from dotenv import load_dotenv
+from shared.llm import get_llm
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableBranch, RunnableLambda
 
-# Load environment variables
 load_dotenv()
 
 def booking_handler(request: str) -> str:
@@ -31,7 +32,7 @@ def setup_langgraph_router():
     """
     try:
         # Use a descriptive model name if needed, or fallback
-        llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+        llm = get_llm(temperature=0)
     except Exception as e:
         print(f"Error initializing LLM: {e}")
         return None
